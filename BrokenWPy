@@ -1,0 +1,42 @@
+import requests
+import bs4
+import csv
+import sys, time
+from PyQt5 import QtCore, QtWidgets, uic
+from tqdm import tqdm
+
+class Ui(QtWidgets.QMainWindow):
+   Broken_Links = {}
+   pages = 0
+
+   def __init__(self):
+      super(Ui, self).__init__()
+      uic.loadUi('BrokenWPy.ui', self)
+      self.show()
+
+   def getPages(domain):
+      pages = int(requests.get(domain+'/wp-json/wp/v2/posts').headers['X-WP-TotalPages'])
+      return pages
+
+   def test():
+      for i in tqdm(range(self.pages), ncols=65):
+         js = requests.get('https://www.example.com/wp-json/wp/v2/tags?page='+str(i+1)).json()
+    
+"""with open("tags.csv", "w", newline='') as f:
+    datawriter = csv.writer(f)
+    datawriter.writerows(tags.items())
+
+res =  requests.get("https://www.ilovefreesoftware.com/wp-json/wp/v2/posts/434959")
+
+soup = bs4.BeautifulSoup(res.json()["content"]["rendered"], 'html.parser')
+
+links = [link['href'] for link in soup('a') if 'href' in link.attrs]
+
+for link in links:
+   r = requests.get(link)
+   if r.status_code != 200:
+      print(r.status_code, link)
+"""
+app = QtWidgets.QApplication(sys.argv)
+window = Ui()
+app.exec_()      
